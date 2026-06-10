@@ -33,7 +33,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${mono.variable}`} suppressHydrationWarning>
-      <body className={`${inter.variable} ${mono.variable}`} suppressHydrationWarning>{children}</body>
+      <body className={`${inter.variable} ${mono.variable}`} suppressHydrationWarning>
+        {children}
+        <Analytics />
+      </body>
     </html>
   )
 }
