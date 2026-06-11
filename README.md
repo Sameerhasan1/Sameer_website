@@ -6,7 +6,7 @@
 
 Building scalable web applications, beautiful user experiences, and AI-powered solutions.
 
-[🌐 Live Portfolio](https://your-portfolio.vercel.app)
+[🌐 Live Portfolio](https://sameer-website-rosy.vercel.app/)
 •
 [💼 LinkedIn](https://linkedin.com/in/sameer-h-607594205)
 •
