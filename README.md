@@ -12,7 +12,7 @@ Building scalable web applications, beautiful user experiences, and AI-powered s
 •
 [📧 Email](mailto:sameerhasanwork1@gmail.com)
 •
-[📄 Resume](https://your-resume-link)
+[📄 Resume](https://drive.google.com/file/d/1e8ZUWcRw3xxvOmdhZ0gNQqXhG2rmw7Jm/view?usp=drive_link)
 
 </div>
 
@@ -26,7 +26,7 @@ Building scalable web applications, beautiful user experiences, and AI-powered s
 
 ### 🚀 Live Website
 
-👉 **https://your-portfolio.vercel.app**
+👉 **https://sameer-website-rosy.vercel.app/**
 
 </div>
 
