@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import SectionHeading from '@/components/ui/SectionHeading'
 import type { SiteSettings, ContactInfo } from '@/lib/types'
+import { useIsMobile } from '@/hooks/useIsMobile'
 
 const FALLBACK_INFO: ContactInfo = {
   email: 'sameerhasanwork1@gmail.com',
@@ -30,6 +31,7 @@ export default function Contact({ contactData, siteData }: {
   contactData: ContactInfo | null
   siteData: SiteSettings | null
 }) {
+  const isMobile = useIsMobile()
   const info = contactData ?? FALLBACK_INFO
   const socials = siteData?.socials
 
@@ -72,12 +74,15 @@ export default function Contact({ contactData, siteData }: {
       <div className="section-container">
         <SectionHeading eyebrow="contact" title="Let's Work Together" />
 
-        <div className="contact-grid" style={{
-          display: 'grid',
-          gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.4fr)',
-          gap: 'clamp(2rem, 6vw, 5rem)',
-          alignItems: 'start',
-        }}>
+        <div
+          className="contact-grid"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: isMobile ? '1fr' : 'minmax(0, 1fr) minmax(0, 1.4fr)',
+            gap: 'clamp(2rem, 6vw, 5rem)',
+            alignItems: 'start',
+          }}
+        >
 
           {/* ── Left: info panel ── */}
           <motion.div

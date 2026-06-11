@@ -4,6 +4,8 @@ import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { urlFor } from '@/lib/sanity/client'
 import type { SiteSettings } from '@/lib/types'
+import { useIsMobile } from '@/hooks/useIsMobile'
+
 
 const AVAIL_COLOR = {
   available: '#22c55e',
@@ -43,6 +45,7 @@ const FALLBACK: Partial<SiteSettings> = {
 }
 
 export default function Hero({ data }: { data: SiteSettings | null }) {
+  const isMobile = useIsMobile()
   const d = { ...FALLBACK, ...data } as SiteSettings
   const availColor = AVAIL_COLOR[d.availability] ?? AVAIL_COLOR.available
   const availLabel = AVAIL_LABEL[d.availability] ?? AVAIL_LABEL.available
@@ -55,17 +58,23 @@ export default function Hero({ data }: { data: SiteSettings | null }) {
       justifyContent: 'center',
       maxWidth: '1100px',
       margin: '0 auto',
-      padding: 'clamp(5.5rem, 12vw, 9rem) clamp(1.5rem, 5vw, 3rem) 3rem',
+      padding: isMobile
+        ? '7rem 1.25rem 2rem'
+        : 'clamp(5.5rem, 12vw, 9rem) clamp(1.5rem, 5vw, 3rem) 3rem',
       width: '100%',
     }}>
 
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 280px',
-        gap: 'clamp(2rem, 5vw, 4rem)',
-        alignItems: 'center',
-        width: '100%',
-        }}>
+      <div
+        className="hero-layout-grid"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: isMobile ? '1fr' : '1fr 280px',
+          gap: 'clamp(2rem, 5vw, 4rem)',
+          alignItems: 'center',
+          width: '100%',
+          textAlign: isMobile ? 'center' : 'left',
+        }}
+      >
 
         {/* ── Left: Text ── */}
         <div>
@@ -110,7 +119,7 @@ export default function Hero({ data }: { data: SiteSettings | null }) {
           {/* Tagline */}
           <motion.p {...up(0.2)} style={{
             fontSize: '1rem', color: 'var(--color-text-muted)',
-            lineHeight: '1.8', maxWidth: '500px', marginBottom: '2.25rem',
+            lineHeight: '1.8', maxWidth: isMobile ? '100%' : '500px', marginBottom: '2.25rem',
           }}>
             {d.tagline}
           </motion.p>
@@ -118,7 +127,13 @@ export default function Hero({ data }: { data: SiteSettings | null }) {
           {/* CTAs */}
           <motion.div {...up(0.26)}
             className="hero-ctas"
-            style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '2rem' }}
+            style={{
+              display: 'flex',
+              gap: '12px',
+              flexWrap: 'wrap',
+              marginBottom: '2rem',
+              justifyContent: isMobile ? 'center' : 'flex-start',
+            }}
           >
             {d.resumeUrl && (
               <a href={d.resumeUrl} target="_blank" rel="noopener noreferrer" className="btn-primary">
@@ -137,7 +152,12 @@ export default function Hero({ data }: { data: SiteSettings | null }) {
           {d.socials && (
             <motion.div {...up(0.32)}
               className="hero-socials"
-              style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}
+              style={{
+                display: 'flex',
+                gap: '20px',
+                flexWrap: 'wrap',
+                justifyContent: isMobile ? 'center' : 'flex-start',
+              }}
             >
               {([
                 ['github', 'GitHub'],
@@ -160,10 +180,17 @@ export default function Hero({ data }: { data: SiteSettings | null }) {
           initial={{ opacity: 0, scale: 0.88 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.65, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] as const }}
-          style={{ display: 'flex', justifyContent: 'flex-end' }}
+          style={{
+            display: 'flex',
+            justifyContent: isMobile ? 'center' : 'flex-end',
+            order: isMobile ? -1 : 0,
+            marginBottom: isMobile ? '1rem' : 0,
+          }}
         >
           <div style={{
-            width: 'clamp(200px, 22vw, 268px)',
+            width: isMobile
+              ? 'clamp(230px, 55vw, 280px)'
+              : 'clamp(200px, 22vw, 268px)',
             aspectRatio: '1',
             borderRadius: '50%',
             overflow: 'hidden',
@@ -182,7 +209,6 @@ export default function Hero({ data }: { data: SiteSettings | null }) {
                 priority
               />
             ) : (
-              // ↓ now uses your local photo instead of "SH" text
               <Image
                 src="/images/Profileme.png"
                 alt={d.name ?? 'Sameer Hasan'}
@@ -203,10 +229,13 @@ export default function Hero({ data }: { data: SiteSettings | null }) {
         transition={{ duration: 0.5, delay: 0.5 }}
         className="hero-stats"
         style={{
-          display: 'flex', gap: 'clamp(2rem, 5vw, 4rem)', flexWrap: 'wrap',
-          marginTop: 'clamp(3rem, 7vw, 5rem)',
+          display: 'flex',
+          gap: 'clamp(1.5rem, 5vw, 4rem)',
+          flexWrap: 'wrap',
+          marginTop: 'clamp(2rem, 7vw, 5rem)',
           paddingTop: '2rem',
           borderTop: '1px solid var(--color-border)',
+          justifyContent: isMobile ? 'center' : 'flex-start',
         }}
       >
         {STATS.map(stat => (
