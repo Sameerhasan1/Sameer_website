@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTheme } from '@/contexts/ThemeContext'
 
 const NAV = [
   { label: 'About', id: 'about' },
@@ -17,6 +18,9 @@ export default function Navbar() {
   const [active, setActive] = useState('')
   const [open, setOpen] = useState(false)
   const [progress, setProgress] = useState(0)
+
+  const { theme, toggle } = useTheme()
+  
 
   useEffect(() => {
     const onScroll = () => {
@@ -80,7 +84,7 @@ export default function Navbar() {
             display: 'flex', alignItems: 'center', gap: '10px',
           }}
         >
-          <span style={{
+          <span className="nav-logo-box" style={{
             width: '30px', height: '30px', borderRadius: '7px',
             background: 'var(--color-accent)', display: 'flex',
             alignItems: 'center', justifyContent: 'center',
@@ -115,6 +119,39 @@ export default function Navbar() {
             </button>
           ))}
         </nav>
+
+         <button
+            onClick={toggle}
+            title={theme === 'terminal' ? 'Exit terminal mode' : 'Switch to terminal theme'}
+            style={{
+              background: 'none',
+              border: `1px solid ${theme === 'terminal' ? 'rgba(0,255,65,0.5)' : 'var(--color-border)'}`,
+              borderRadius: '6px',
+              cursor: 'pointer',
+              padding: '5px 12px',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '12px',
+              letterSpacing: '0.05em',
+              color: theme === 'terminal' ? '#00ff41' : 'var(--color-text-muted)',
+              transition: 'all 0.2s',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              flexShrink: 0,
+              boxShadow: theme === 'terminal' ? '0 0 10px rgba(0,255,65,0.3)' : 'none',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.borderColor = theme === 'terminal' ? '#00ff41' : 'var(--color-accent)'
+              e.currentTarget.style.color = theme === 'terminal' ? '#57ff7a' : 'var(--color-text)'
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.borderColor = theme === 'terminal' ? 'rgba(0,255,65,0.5)' : 'var(--color-border)'
+              e.currentTarget.style.color = theme === 'terminal' ? '#00ff41' : 'var(--color-text-muted)'
+            }}
+          >
+            {theme === 'terminal' ? '◈ exit' : '>_ hack'}
+          </button> 
+          
 
         {/* Mobile hamburger */}
         <button
