@@ -5,6 +5,9 @@ import Image from 'next/image'
 import { urlFor } from '@/lib/sanity/client'
 import type { SiteSettings } from '@/lib/types'
 import { useIsMobile } from '@/hooks/useIsMobile'
+import ScrambleText from '@/components/ui/ScrambleText'
+import MagneticButton from '@/components/ui/MagneticButton'
+import GlitchText from '@/components/ui/GlitchText'
 
 
 const AVAIL_COLOR = {
@@ -99,21 +102,25 @@ export default function Hero({ data }: { data: SiteSettings | null }) {
 
           {/* Name */}
           <motion.h1 {...up(0.08)} style={{
-            fontSize: 'clamp(2.6rem, 6.5vw, 4.5rem)',
-            fontWeight: '600', lineHeight: '1.06',
-            letterSpacing: '-0.03em', marginBottom: '0.6rem',
+            fontSize: 'clamp(2.8rem, 7vw, 5rem)',
+            fontWeight: '700', lineHeight: '1.04',
+            letterSpacing: '-0.035em', marginBottom: '0.5rem',
           }}>
-            {d.name}
+            <GlitchText
+              text={d.name}
+              className="gradient-text"
+              style={{ fontSize: 'inherit', fontWeight: 'inherit', lineHeight: 'inherit', letterSpacing: 'inherit' }}
+            />
           </motion.h1>
 
           {/* Title */}
-          <motion.p {...up(0.14)} style={{
+          <motion.p {...up(0.16)} style={{
             fontFamily: 'var(--font-mono)',
-            fontSize: 'clamp(0.95rem, 2vw, 1.15rem)',
-            color: 'var(--color-accent)',
-            marginBottom: '1.4rem', fontWeight: '400',
+            fontSize: 'clamp(0.85rem, 2vw, 1.05rem)',
+            color: 'var(--color-accent)', marginBottom: '1.4rem',
           }}>
-            {d.title}
+            <span style={{ color: 'var(--color-text-muted)', marginRight: '8px' }}>{'// '}</span>
+            <ScrambleText text={d.title} triggerOnMount speed={18} />
           </motion.p>
 
           {/* Tagline */}
@@ -125,23 +132,17 @@ export default function Hero({ data }: { data: SiteSettings | null }) {
           </motion.p>
 
           {/* CTAs */}
-          <motion.div {...up(0.26)}
-            className="hero-ctas"
-            style={{
-              display: 'flex',
-              gap: '12px',
-              flexWrap: 'wrap',
-              marginBottom: '2rem',
-              justifyContent: isMobile ? 'center' : 'flex-start',
-            }}
-          >
+          <motion.div {...up(0.28)} style={{
+            display: 'flex', gap: '14px', flexWrap: 'wrap', marginBottom: '2rem',
+            justifyContent: isMobile ? 'center' : 'flex-start',
+          }}>
             {d.resumeUrl && (
-              <a href={d.resumeUrl} target="_blank" rel="noopener noreferrer" className="btn-primary">
-                View CV ↗
+              <a href={d.resumeUrl} target="_blank" rel="noopener noreferrer" className="btn-neon">
+                View Resume ↗
               </a>
             )}
             <button
-              className="btn-secondary"
+              className="btn-neon"
               onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Get in touch

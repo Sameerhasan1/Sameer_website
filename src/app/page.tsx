@@ -13,6 +13,7 @@ import Projects from '@/components/sections/Projects'
 import Research from '@/components/sections/Research'
 import Achievements from '@/components/sections/Achievements'
 import Contact from '@/components/sections/Contact'
+import Marquee from '@/components/ui/Marquee'
 import type { SiteSettings, Skill, Experience, Project, Publication, Achievement, ContactInfo } from '@/lib/types'
 
 export default async function Home() {
@@ -30,17 +31,20 @@ export default async function Home() {
   return (
     <>
       <Navbar />
-      <main>
-        <Hero        data={settings} />
-        <About       data={settings} />
-        <Skills      data={skills} />
-        <ExperienceSection data={experiences} />
-        <Projects    data={projects} />
-        <Research    data={publications} />
-        <Achievements data={achievements} />
-        <Contact     contactData={contactInfo} siteData={settings} />
-      </main>
-      <Footer name={settings?.name} />
+        <main>
+          <Hero data={settings} />
+          <Marquee />
+          <About data={settings} />
+          <Skills data={skills} />
+          <Marquee reverse />
+          <ExperienceSection data={experiences} />
+          <Projects data={projects} />
+          <Marquee />
+          <Research data={publications} />
+          <Achievements data={achievements} />
+          <Contact contactData={contactInfo} siteData={settings} />
+        </main>
+        <Footer name={settings?.name} />
     </>
   )
 }

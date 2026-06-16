@@ -1,117 +1,127 @@
 'use client'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { type ComponentType } from 'react'
 import * as Si from 'react-icons/si'
 import SectionHeading from '@/components/ui/SectionHeading'
+import ScrambleText from '@/components/ui/ScrambleText'
 import type { Skill } from '@/lib/types'
 
 const FALLBACK_SKILLS: Skill[] = [
-  // Languages
-  { _id: 's1', name: 'JavaScript', iconName: 'SiJavascript', category: 'Languages', level: 'Advanced' },
-  { _id: 's2', name: 'TypeScript', iconName: 'SiTypescript', category: 'Languages', level: 'Advanced' },
-  { _id: 's3', name: 'Dart', iconName: 'SiDart', category: 'Languages', level: 'Advanced' },
-  { _id: 's4', name: 'Python', iconName: 'SiPython', category: 'Languages', level: 'Intermediate' },
-  { _id: 's5', name: 'C++', iconName: 'SiCplusplus', category: 'Languages', level: 'Intermediate' },
-  { _id: 's6', name: 'SQL', iconName: 'SiMysql', category: 'Languages', level: 'Intermediate' },
-  // Backend
-  { _id: 's7', name: 'Node.js', iconName: 'SiNodedotjs', category: 'Backend', level: 'Advanced' },
-  { _id: 's8', name: 'Express.js', iconName: 'SiExpress', category: 'Backend', level: 'Advanced' },
-  // Frontend
-  { _id: 's9',  name: 'React.js',    iconName: 'SiReact',      category: 'Frontend', level: 'Advanced' },
-  { _id: 's10', name: 'Next.js',     iconName: 'SiNextdotjs',  category: 'Frontend', level: 'Advanced' },
-  { _id: 's11', name: 'Vue.js',      iconName: 'SiVuedotjs',   category: 'Frontend', level: 'Intermediate' },
-  { _id: 's12', name: 'Nuxt.js',     iconName: 'SiNuxtdotjs',  category: 'Frontend', level: 'Intermediate' },
-  { _id: 's13', name: 'TailwindCSS', iconName: 'SiTailwindcss',category: 'Frontend', level: 'Advanced' },
-  { _id: 's14', name: 'Flutter',     iconName: 'SiFlutter',    category: 'Frontend', level: 'Advanced' },
-  // Databases
-  { _id: 's15', name: 'PostgreSQL', iconName: 'SiPostgresql', category: 'Databases', level: 'Advanced' },
-  { _id: 's16', name: 'MySQL',      iconName: 'SiMysql',      category: 'Databases', level: 'Intermediate' },
-  { _id: 's17', name: 'MongoDB',    iconName: 'SiMongodb',    category: 'Databases', level: 'Intermediate' },
-  // Cloud / DevOps
-  { _id: 's18', name: 'Google Cloud', iconName: 'SiGooglecloud', category: 'Cloud/DevOps', level: 'Advanced' },
-  { _id: 's19', name: 'Firebase',     iconName: 'SiFirebase',    category: 'Cloud/DevOps', level: 'Advanced' },
-  { _id: 's20', name: 'Docker',       iconName: 'SiDocker',      category: 'Cloud/DevOps', level: 'Intermediate' },
-  { _id: 's21', name: 'Kubernetes',   iconName: 'SiKubernetes',  category: 'Cloud/DevOps', level: 'Familiar' },
-  { _id: 's22', name: 'Git',          iconName: 'SiGit',         category: 'Cloud/DevOps', level: 'Advanced' },
+  { _id: 's1',  name: 'JavaScript',  iconName: 'SiJavascript', category: 'Languages',    level: 'Advanced',     order: 1 },
+  { _id: 's2',  name: 'TypeScript',  iconName: 'SiTypescript', category: 'Languages',    level: 'Advanced',     order: 2 },
+  { _id: 's3',  name: 'Dart',        iconName: 'SiDart',       category: 'Languages',    level: 'Advanced',     order: 3 },
+  { _id: 's4',  name: 'Python',      iconName: 'SiPython',     category: 'Languages',    level: 'Intermediate', order: 4 },
+  { _id: 's5',  name: 'C++',         iconName: 'SiCplusplus',  category: 'Languages',    level: 'Intermediate', order: 5 },
+  { _id: 's6',  name: 'Node.js',     iconName: 'SiNodedotjs',  category: 'Backend',      level: 'Advanced',     order: 1 },
+  { _id: 's7',  name: 'Express.js',  iconName: 'SiExpress',    category: 'Backend',      level: 'Advanced',     order: 2 },
+  { _id: 's8',  name: 'React.js',    iconName: 'SiReact',      category: 'Frontend',     level: 'Advanced',     order: 1 },
+  { _id: 's9',  name: 'Next.js',     iconName: 'SiNextdotjs',  category: 'Frontend',     level: 'Advanced',     order: 2 },
+  { _id: 's10', name: 'Vue.js',      iconName: 'SiVuedotjs',   category: 'Frontend',     level: 'Intermediate', order: 3 },
+  { _id: 's11', name: 'Nuxt.js',     iconName: 'SiNuxtdotjs',  category: 'Frontend',     level: 'Intermediate', order: 4 },
+  { _id: 's12', name: 'TailwindCSS', iconName: 'SiTailwindcss',category: 'Frontend',     level: 'Advanced',     order: 5 },
+  { _id: 's13', name: 'Flutter',     iconName: 'SiFlutter',    category: 'Frontend',     level: 'Advanced',     order: 6 },
+  { _id: 's14', name: 'PostgreSQL',  iconName: 'SiPostgresql', category: 'Databases',    level: 'Advanced',     order: 1 },
+  { _id: 's15', name: 'MySQL',       iconName: 'SiMysql',      category: 'Databases',    level: 'Intermediate', order: 2 },
+  { _id: 's16', name: 'MongoDB',     iconName: 'SiMongodb',    category: 'Databases',    level: 'Intermediate', order: 3 },
+  { _id: 's17', name: 'Google Cloud',iconName: 'SiGooglecloud',category: 'Cloud/DevOps', level: 'Advanced',     order: 1 },
+  { _id: 's18', name: 'Firebase',    iconName: 'SiFirebase',   category: 'Cloud/DevOps', level: 'Advanced',     order: 2 },
+  { _id: 's19', name: 'Docker',      iconName: 'SiDocker',     category: 'Cloud/DevOps', level: 'Intermediate', order: 3 },
+  { _id: 's20', name: 'Kubernetes',  iconName: 'SiKubernetes', category: 'Cloud/DevOps', level: 'Familiar',     order: 4 },
+  { _id: 's21', name: 'Git',         iconName: 'SiGit',        category: 'Cloud/DevOps', level: 'Advanced',     order: 5 },
 ]
 
-const CATEGORY_ORDER = ['Languages', 'Backend', 'Frontend', 'Databases', 'Cloud/DevOps', 'Tools']
+const CATS = ['All', 'Languages', 'Backend', 'Frontend', 'Databases', 'Cloud/DevOps']
 
-function SkillIcon({ iconName }: { iconName?: string }) {
-  if (!iconName) return null
-  const Icon = Si[iconName as keyof typeof Si] as ComponentType<{ size?: number }> | undefined
-  if (!Icon) return null
-  return <Icon size={18} />
+function Icon({ name }: { name?: string }) {
+  if (!name) return null
+  const I = Si[name as keyof typeof Si] as ComponentType<{ size?: number }> | undefined
+  return I ? <I size={14} /> : null
 }
 
-function groupSkills(skills: Skill[]) {
-  const map: Record<string, Skill[]> = {}
-  skills.forEach(s => { (map[s.category] ??= []).push(s) })
-  return CATEGORY_ORDER.filter(c => map[c]).map(c => ({ category: c, items: map[c] }))
+const LEVEL_COLOR: Record<string, string> = {
+  Expert: '#a5b4fc', Advanced: '#818cf8',
+  Intermediate: '#6366f1', Familiar: 'var(--color-text-muted)',
 }
 
 export default function Skills({ data }: { data: Skill[] | null }) {
   const skills = data && data.length > 0 ? data : FALLBACK_SKILLS
-  const grouped = groupSkills(skills)
+  const [cat, setCat] = useState('All')
+
+  const filtered = cat === 'All' ? skills : skills.filter(s => s.category === cat)
 
   return (
     <section id="skills">
       <div className="section-container">
-        <SectionHeading eyebrow="expertise" title="Skills & Technologies" />
+        <SectionHeading eyebrow="expertise" title="Skills & Tech" number="02 —" />
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
-          {grouped.map(({ category, items }, gi) => (
-            <div key={category}>
-              <motion.p
-                initial={{ opacity: 0, x: -10 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.4, delay: gi * 0.04 }}
-                style={{
-                  fontFamily: 'var(--font-mono)', fontSize: '11px',
-                  color: 'var(--color-text-muted)', letterSpacing: '0.1em',
-                  textTransform: 'uppercase', marginBottom: '1rem',
-                  paddingBottom: '0.6rem', borderBottom: '1px solid var(--color-border)',
-                }}
-              >
-                {category}
-              </motion.p>
+        {/* Category tabs */}
+        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '2.5rem' }}>
+          {CATS.map(c => (
+            <button
+              key={c} onClick={() => setCat(c)}
+              style={{
+                padding: '5px 14px', borderRadius: '999px',
+                fontFamily: 'var(--font-mono)', fontSize: '11px',
+                letterSpacing: '0.06em', cursor: 'pointer',
+                transition: 'all 0.2s',
+                background: cat === c ? 'rgba(99,102,241,0.15)' : 'transparent',
+                border: `1px solid ${cat === c ? 'rgba(99,102,241,0.5)' : 'var(--color-border)'}`,
+                color: cat === c ? 'var(--color-accent)' : 'var(--color-text-muted)',
+              }}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
 
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(128px, 1fr))',
-                gap: '0.625rem',
-              }}>
-                {items.map((skill, i) => (
-                  <motion.div
-                    key={skill._id}
-                    initial={{ opacity: 0, y: 14 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: '-30px' }}
-                    transition={{ duration: 0.35, delay: i * 0.04 }}
-                    whileHover={{ borderColor: 'rgba(99,102,241,0.45)', backgroundColor: 'rgba(99,102,241,0.05)' }}
-                    style={{
-                      display: 'flex', alignItems: 'center', gap: '9px',
-                      padding: '9px 13px',
-                      background: 'var(--color-surface)',
-                      border: '1px solid var(--color-border)',
-                      borderRadius: '8px', cursor: 'default',
-                      transition: 'border-color 0.2s, background 0.2s',
-                    }}
-                  >
-                    <span style={{ color: 'var(--color-text-muted)', flexShrink: 0, display: 'flex' }}>
-                      <SkillIcon iconName={skill.iconName} />
-                    </span>
-                    <span style={{
-                      fontSize: '13px', fontWeight: '500',
-                      color: 'var(--color-text)', whiteSpace: 'nowrap',
-                      overflow: 'hidden', textOverflow: 'ellipsis',
-                    }}>
-                      {skill.name}
-                    </span>
-                  </motion.div>
-                ))}
-              </div>
+        {/* Tag cloud */}
+        <motion.div layout style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+          {filtered.map((skill, i) => (
+            <motion.div
+              key={skill._id} layout
+              initial={{ opacity: 0, scale: 0.88 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.88 }}
+              transition={{ duration: 0.25, delay: i * 0.025 }}
+              whileHover={{ y: -3, transition: { duration: 0.15 } }}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '8px',
+                padding: '8px 16px', borderRadius: '999px',
+                background: 'var(--color-surface)',
+                border: '1px solid var(--color-border)',
+                cursor: 'default',
+                transition: 'border-color 0.2s, box-shadow 0.2s',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.borderColor = LEVEL_COLOR[skill.level ?? 'Familiar']
+                e.currentTarget.style.boxShadow = `0 0 16px ${LEVEL_COLOR[skill.level ?? 'Familiar']}22`
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.borderColor = 'var(--color-border)'
+                e.currentTarget.style.boxShadow = 'none'
+              }}
+            >
+              <span style={{ color: LEVEL_COLOR[skill.level ?? 'Familiar'], display: 'flex', flexShrink: 0 }}>
+                <Icon name={skill.iconName} />
+              </span>
+              <ScrambleText
+                text={skill.name}
+                speed={22}
+                style={{ fontSize: '13px', fontWeight: '500', color: 'var(--color-text)' }}
+              />
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Level legend */}
+        <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', marginTop: '2rem' }}>
+          {Object.entries(LEVEL_COLOR).map(([level, color]) => (
+            <div key={level} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: color, flexShrink: 0 }} />
+              <span style={{ fontSize: '11px', color: 'var(--color-text-muted)', fontFamily: 'var(--font-mono)' }}>
+                {level}
+              </span>
             </div>
           ))}
         </div>

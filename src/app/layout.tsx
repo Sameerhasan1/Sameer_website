@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
 import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from '@/contexts/ThemeContext'
+import PageLoader from '@/components/ui/PageLoader'
+import HUDStatusBar from '@/components/ui/HUDStatusBar'
 import './globals.css'
 
 const inter = Inter({
@@ -36,7 +38,9 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${mono.variable}`} suppressHydrationWarning>
       <body className={`${inter.variable} ${mono.variable}`} suppressHydrationWarning>
         <ThemeProvider>
+          <PageLoader />
           {children}
+          <HUDStatusBar />
         </ThemeProvider>
         <Analytics />
       </body>

@@ -1,6 +1,7 @@
 'use client'
 import { motion } from 'framer-motion'
 import SectionHeading from '@/components/ui/SectionHeading'
+import HUDCorners from '@/components/ui/HUDCorners'
 import type { Experience } from '@/lib/types'
 
 const FALLBACK: Experience[] = [
@@ -45,14 +46,15 @@ export default function Experience({ data }: { data: Experience[] | null }) {
   return (
     <section id="experience" style={{ background: 'var(--color-surface)' }}>
       <div className="section-container">
-        <SectionHeading eyebrow="work history" title="Experience" />
+        <SectionHeading eyebrow="work history" title="Experience" number="03 —" />
 
         <div style={{ position: 'relative' }}>
 
           {/* Timeline vertical line */}
           <div style={{
             position: 'absolute', left: '6px', top: '10px', bottom: '0',
-            width: '1px', background: 'var(--color-border)',
+            width: '1px',
+            background: 'linear-gradient(to bottom, var(--color-accent), transparent)',
           }} />
 
           {experiences.map((exp, i) => (
@@ -65,107 +67,134 @@ export default function Experience({ data }: { data: Experience[] | null }) {
               style={{
                 position: 'relative',
                 paddingLeft: '2.5rem',
-                paddingBottom: i < experiences.length - 1 ? '3.5rem' : 0,
+                paddingBottom: i < experiences.length - 1 ? '3rem' : 0,
               }}
             >
-              {/* Dot */}
+              {/* Timeline dot */}
               <div style={{
-                position: 'absolute', left: 0, top: '8px',
+                position: 'absolute', left: 0, top: '22px',
                 width: '13px', height: '13px', borderRadius: '50%',
                 background: 'var(--color-bg)',
                 border: '2px solid var(--color-accent)',
-                boxShadow: '0 0 10px rgba(99,102,241,0.35)',
+                boxShadow: '0 0 10px rgba(99,102,241,0.5)',
+                zIndex: 1,
               }} />
 
-              {/* Header */}
-              <div style={{
-                display: 'flex', justifyContent: 'space-between',
-                alignItems: 'flex-start', flexWrap: 'wrap',
-                gap: '0.5rem', marginBottom: '1rem',
-              }}>
-                <div>
-                  <h3 style={{
-                    fontSize: '1.05rem', fontWeight: '600',
-                    color: 'var(--color-text)', marginBottom: '3px',
-                  }}>
-                    {exp.role}
-                  </h3>
-                  <p style={{ fontSize: '14px', color: 'var(--color-accent)', fontWeight: '500' }}>
-                    {exp.companyUrl ? (
-                      <a href={exp.companyUrl} target="_blank" rel="noopener noreferrer"
-                        style={{ color: 'inherit', textDecoration: 'none' }}>
-                        {exp.company} ↗
-                      </a>
-                    ) : exp.company}
-                  </p>
-                </div>
-                <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                  <p style={{
-                    fontSize: '12px', color: 'var(--color-text-muted)',
-                    fontFamily: 'var(--font-mono)',
-                  }}>
-                    {exp.startDate} – {exp.current ? 'Present' : (exp.endDate ?? '')}
-                  </p>
-                  {exp.locationType && (
-                    <p style={{ fontSize: '11px', color: 'var(--color-text-muted)', marginTop: '2px' }}>
-                      {exp.locationType}
+              {/* ── HUD card ── */}
+              <div
+                className="hud-card"
+                style={{
+                  position: 'relative',
+                  background: 'var(--color-surface-2)',
+                  border: '1px solid var(--color-border)',
+                  padding: 'clamp(1.25rem, 3vw, 1.75rem)',
+                  transition: 'border-color 0.2s',
+                }}
+                onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(99,102,241,0.4)')}
+                onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--color-border)')}
+              >
+                {/* Anime corner brackets */}
+                <HUDCorners size={14} />
+
+                {/* Header row */}
+                <div style={{
+                  display: 'flex', justifyContent: 'space-between',
+                  alignItems: 'flex-start', flexWrap: 'wrap',
+                  gap: '0.5rem', marginBottom: '1.1rem',
+                }}>
+                  <div>
+                    <h3 style={{
+                      fontSize: '1.05rem', fontWeight: '600',
+                      color: 'var(--color-text)', marginBottom: '3px',
+                    }}>
+                      {exp.role}
+                    </h3>
+                    <p style={{ fontSize: '14px', color: 'var(--color-accent)', fontWeight: '500' }}>
+                      {exp.companyUrl ? (
+                        <a href={exp.companyUrl} target="_blank" rel="noopener noreferrer"
+                          style={{ color: 'inherit', textDecoration: 'none' }}>
+                          {exp.company} ↗
+                        </a>
+                      ) : exp.company}
                     </p>
-                  )}
+                  </div>
+
+                  <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                    <p style={{
+                      fontSize: '11px', color: 'var(--color-text-muted)',
+                      fontFamily: 'var(--font-mono)', letterSpacing: '0.05em',
+                    }}>
+                      {exp.startDate} — {exp.current ? 'Present' : (exp.endDate ?? '')}
+                    </p>
+                    {exp.locationType && (
+                      <span style={{
+                        display: 'inline-block', marginTop: '4px',
+                        fontSize: '10px', padding: '2px 8px',
+                        border: '1px solid var(--color-border)',
+                        color: 'var(--color-text-muted)',
+                        fontFamily: 'var(--font-mono)', letterSpacing: '0.08em',
+                      }}>
+                        {exp.locationType.toUpperCase()}
+                      </span>
+                    )}
+                  </div>
                 </div>
-              </div>
 
-              {/* Bullets */}
-              <ul style={{
-                listStyle: 'none', marginBottom: '1.25rem',
-                display: 'flex', flexDirection: 'column', gap: '0.55rem',
-              }}>
-                {exp.bullets.map((b, bi) => (
-                  <li key={bi} style={{ display: 'flex', gap: '0.7rem', alignItems: 'flex-start' }}>
-                    <span style={{
-                      color: 'var(--color-accent)', flexShrink: 0,
-                      marginTop: '0.35em', fontSize: '9px',
-                    }}>▸</span>
-                    <span style={{
-                      fontSize: '14px', color: 'var(--color-text-muted)', lineHeight: 1.75,
-                    }}>
-                      {b}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-
-              {/* Tech tags */}
-              {exp.techStack?.length > 0 && (
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                  {exp.techStack.map(t => (
-                    <span key={t} style={{
-                      fontSize: '11px', padding: '3px 10px', borderRadius: '999px',
-                      background: 'rgba(99,102,241,0.1)', color: 'var(--color-accent)',
-                      border: '1px solid rgba(99,102,241,0.2)',
-                      fontFamily: 'var(--font-mono)', letterSpacing: '0.02em',
-                    }}>
-                      {t}
-                    </span>
+                {/* Bullets */}
+                <ul style={{
+                  listStyle: 'none', marginBottom: '1.25rem',
+                  display: 'flex', flexDirection: 'column', gap: '0.55rem',
+                }}>
+                  {exp.bullets.map((b, bi) => (
+                    <li key={bi} style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                      <span style={{
+                        color: 'var(--color-accent)', flexShrink: 0,
+                        marginTop: '0.38em', fontSize: '8px',
+                        fontFamily: 'var(--font-mono)',
+                      }}>
+                        ▸
+                      </span>
+                      <span style={{ fontSize: '13.5px', color: 'var(--color-text-muted)', lineHeight: 1.75 }}>
+                        {b}
+                      </span>
+                    </li>
                   ))}
-                </div>
-              )}
+                </ul>
 
-              {/* Certificate link */}
-              {exp.certificateUrl && (
-                <a
-                  href={exp.certificateUrl} target="_blank" rel="noopener noreferrer"
-                  style={{
-                    display: 'inline-flex', alignItems: 'center', gap: '4px',
-                    fontSize: '12px', color: 'var(--color-text-muted)',
-                    textDecoration: 'none', marginTop: '0.75rem',
-                    transition: 'color 0.2s',
-                  }}
-                  onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-accent)')}
-                  onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-text-muted)')}
-                >
-                  View Certificate ↗
-                </a>
-              )}
+                {/* Tech tags */}
+                {exp.techStack?.length > 0 && (
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: exp.certificateUrl ? '1rem' : 0 }}>
+                    {exp.techStack.map(t => (
+                      <span key={t} style={{
+                        fontSize: '10px', padding: '3px 10px',
+                        background: 'rgba(99,102,241,0.08)',
+                        color: 'var(--color-accent)',
+                        border: '1px solid rgba(99,102,241,0.2)',
+                        fontFamily: 'var(--font-mono)', letterSpacing: '0.04em',
+                      }}>
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {/* Certificate link */}
+                {exp.certificateUrl && (
+                  <a
+                    href={exp.certificateUrl} target="_blank" rel="noopener noreferrer"
+                    style={{
+                      display: 'inline-flex', alignItems: 'center', gap: '4px',
+                      fontSize: '11px', color: 'var(--color-text-muted)',
+                      textDecoration: 'none', fontFamily: 'var(--font-mono)',
+                      letterSpacing: '0.06em', transition: 'color 0.2s',
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-accent)')}
+                    onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-text-muted)')}
+                  >
+                    VIEW CERTIFICATE ↗
+                  </a>
+                )}
+              </div>
             </motion.div>
           ))}
         </div>

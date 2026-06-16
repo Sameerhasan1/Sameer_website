@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTheme } from '@/contexts/ThemeContext'
+import ScrambleText from '@/components/ui/ScrambleText'
+
 
 const NAV = [
   { label: 'About', id: 'about' },
@@ -106,16 +108,17 @@ export default function Navbar() {
               onClick={() => scrollTo(id)}
               style={{
                 background: 'none', border: 'none', cursor: 'pointer',
-                padding: '6px 14px', borderRadius: '6px', fontSize: '13.5px',
-                fontFamily: 'inherit', letterSpacing: '0.01em',
+                padding: '6px 14px', borderRadius: '6px',
+                fontFamily: 'var(--font-mono)', fontSize: '12px',
+                letterSpacing: '0.06em', textTransform: 'uppercase',
                 color: active === id ? 'var(--color-accent)' : 'var(--color-text-muted)',
-                fontWeight: active === id ? '500' : '400',
-                transition: 'color 0.2s, background 0.2s',
+                fontWeight: active === id ? '600' : '400',
+                transition: 'color 0.2s',
               }}
-              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.04)')}
-              onMouseLeave={e => (e.currentTarget.style.background = 'none')}
+              onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-text)')}
+              onMouseLeave={e => (e.currentTarget.style.color = active === id ? 'var(--color-accent)' : 'var(--color-text-muted)')}
             >
-              {label}
+              <ScrambleText text={label} speed={28} />
             </button>
           ))}
         </nav>
